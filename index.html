@@ -3,46 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <title>Política Institucional de Lactancia Materna</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
     body {
+      background-color: #F8FAFC;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #ffffff;
-      text-align: center;
-      margin: 0;
-      padding: 2em;
       color: #333;
     }
-    h1 {
+    .header {
+      background-color: #2A5CAA;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    .section-title {
       color: #2A5CAA;
-      margin-bottom: 1em;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
     }
     iframe {
-      width: 80%;
-      max-width: 800px;
-      height: 600px;
       border: none;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
-    p {
-      margin-top: 1em;
-      font-size: 14px;
-      color: #555;
-    }
-    .logo {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      width: 120px;
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #777;
+      padding: 2rem 1rem;
+      background-color: #f1f5f9;
     }
   </style>
 </head>
 <body>
-  <!-- Si tienes un logo institucional, puedes reemplazar el src -->
-  <!-- <img class="logo" src="tu_logo_institucional.png" alt="Logo Institucional"> -->
-  
-  <h1>📄 Política Institucional de Lactancia Materna</h1>
 
-  <iframe src="https://1drv.ms/b/c/afa10ee22887f78b/IQQrUqGn3Gc-S527ringwpzUAUgrtAfkFWoH_jBmjbp7ytI" frameborder="0" scrolling="no"></iframe>
-  
-  <p>Visualización únicamente. Documento oficial del Instituto sin opción de descarga.</p>
+  <div class="header">
+    <h1>🤱 Política Institucional de Lactancia Materna</h1>
+    <p class="mb-0">Consulta visual, videos informativos y canal directo de comunicación</p>
+  </div>
+
+  <div class="container">
+
+    <!-- Sección de Información -->
+    <h2 class="section-title">📄 Documento Institucional</h2>
+    <div class="text-center">
+      <iframe src="https://1drv.ms/b/c/afa10ee22887f78b/IQQrUqGn3Gc-S527ringwpzUAUgrtAfkFWoH_jBmjbp7ytI"
+        width="100%" height="600px"></iframe>
+      <p class="text-muted mt-2">Visualización únicamente. Documento oficial sin opción de descarga.</p>
+    </div>
+
+    <!-- Sección de Videos -->
+    <h2 class="section-title">🎥 Videos Educativos</h2>
+    <div class="row gy-4">
+      <div class="col-md-6">
+        <iframe src="https://drive.google.com/file/d/VIDEO_ID_1/preview" width="100%" height="315" allow="autoplay"></iframe>
+      </div>
+      <div class="col-md-6">
+        <iframe src="https://drive.google.com/file/d/VIDEO_ID_2/preview" width="100%" height="315" allow="autoplay"></iframe>
+      </div>
+      <!-- Puedes clonar estas columnas para más videos -->
+    </div>
+
+    <!-- Sección de Contacto -->
+    <h2 class="section-title">📬 Envíanos tus preguntas</h2>
+    <form action="mailto:tu_correo@institucion.edu.mx" method="POST" enctype="text/plain">
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Tu nombre</label>
+        <input type="text" class="form-control" id="nombre" name="Nombre" required>
+      </div>
+      <div class="mb-3">
+        <label for="mensaje" class="form-label">Pregunta o comentario</label>
+        <textarea class="form-control" id="mensaje" name="Mensaje" rows="4" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar por correo</button>
+    </form>
+
+  </div>
+
+  <footer>
+    Micrositio institucional · Lactancia Materna · © 2025 Instituto de Salud Materno Infantil
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
