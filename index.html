@@ -1,84 +1,610 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Micrositio Institucional</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    /* Estilo de la gota */
-    .gota-menu {
-      width: 120px;
-      height: 160px;
-      margin: auto;
-      background: linear-gradient(to bottom, #FF69B4, #2A5CAA);
-      border-radius: 60% 60% 50% 50% / 70% 70% 30% 30%;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      position: relative;
-      color: white;
-      text-align: center;
-    }
-    .gota-menu a {
-      color: white;
-      text-decoration: none;
-      display: block;
-      margin: 4px 0;
-      font-size: 13px;
-    }
-    .section-title {
-      margin-top: 3rem;
-      font-weight: bold;
-      text-align: center;
-    }
-    .section-content {
-      max-width: 720px;
-      margin: auto;
-      padding: 1rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lactancia Materna - Guía Completa</title>
+    <style>
+        :root {
+            --primary-color: #F781F0;
+            --secondary-color: #F7B733;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #5cb85c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f9ff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a3a7a 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            height: 80px;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+        
+        nav {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            padding: 1rem 0;
+        }
+        
+        .nav-link {
+            padding: 0.5rem 1.5rem;
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+            margin: 0 5px;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        section {
+            padding: 3rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary-color);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .card-title {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .benefit-icon {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin: 2rem 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+        
+        .faq-question {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .faq-answer {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 0 0 8px 8px;
+            display: none;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .contact-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .contact-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .footer-link {
+            color: white;
+            margin: 0 1rem;
+            text-decoration: none;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 99;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 1rem;
+                margin: 0.2rem;
+                font-size: 0.9rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="bg-light">
-
-  <!-- Menú en forma de gota -->
-  <div class="text-center my-4">
-    <div class="gota-menu d-flex align-items-center justify-content-center">
-      <div>
-        <small style="font-size:12px; font-weight:bold;">MENÚ</small>
-        <a href="#documento">📄 Documento</a>
-        <a href="#videos">🎥 Videos</a>
-        <a href="#contacto">📬 Preguntas</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Sección Documento -->
-  <h2 class="section-title" id="documento">📄 Documento Institucional</h2>
-  <div class="section-content">
-    <p>Aquí va el documento oficial, con contenido relevante y descargable si lo deseas.</p>
-  </div>
-
-  <!-- Sección Videos -->
-  <h2 class="section-title" id="videos">🎥 Videos Educativos</h2>
-  <div class="section-content">
-    <p>Incorpora aquí los videos con iframe de YouTube, tutoriales o testimonios institucionales.</p>
-  </div>
-
-  <!-- Sección Preguntas -->
-  <h2 class="section-title" id="contacto">📬 Envíanos tus preguntas</h2>
-  <div class="section-content">
-    <form>
-      <div class="mb-3">
-        <label for="nombre" class="form-label">Tu nombre</label>
-        <input type="text" class="form-control" id="nombre" placeholder="Escribe tu nombre">
-      </div>
-      <div class="mb-3">
-        <label for="pregunta" class="form-label">Tu pregunta</label>
-        <textarea class="form-control" id="pregunta" rows="4" placeholder="¿Qué quieres saber?"></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary">Enviar pregunta</button>
-    </form>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<body>
+    <header>
+        <div class="header-content container">
+            <!-- Reemplaza con tu logo -->
+            <img src="https://via.placeholder.com/80x80?text=Logo" alt="Logo" class="logo">
+            <h1>Lactancia Materna</h1>
+            <p class="subtitle">Micrositio Guía completa para madres y familias</p>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="nav-container container">
+            <a href="#beneficios" class="nav-link">Beneficios</a>
+            <a href="#tecnicas" class="nav-link">Técnicas</a>
+            <a href="#politica" class="nav-link">Política Institucional</a>
+            <a href="#preguntas" class="nav-link">Preguntas Frecuentes</a>
+            <a href="#contacto" class="nav-link">Contacto</a>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <section id="beneficios">
+            <h2 class="section-title">Beneficios de la Lactancia Materna</h2>
+            <div class="benefits-grid">
+                <div class="card">
+                    <h3 class="card-title">Para el bebé</h3>
+                    <ul>
+                        <li>Protege contra infecciones y enfermedades</li>
+                        <li>Reduce el riesgo de alergias</li>
+                        <li>Favorece el desarrollo cognitivo</li>
+                        <li>Disminuye el riesgo de obesidad</li>
+                        <li>Proporciona nutrientes ideales</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Para la madre</h3>
+                    <ul>
+                        <li>Ayuda a recuperar el peso previo al embarazo</li>
+                        <li>Reduce el riesgo de cáncer de mama y ovario</li>
+                        <li>Favorece el vínculo madre-hijo</li>
+                        <li>Es económico y ecológico</li>
+                        <li>Disminuye el riesgo de depresión postparto</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Para la sociedad</h3>
+                    <ul>
+                        <li>Reduce costos en salud pública</li>
+                        <li>Disminuye el absentismo laboral</li>
+                        <li>Promueve familias más saludables</li>
+                        <li>Contribuye a un medio ambiente sostenible</li>
+                        <li>Fomenta el desarrollo social</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="video-container">
+                <!-- Reemplaza con tu video educativo -->
+                <iframe src="https://www.youtube.com/embed/ejN7bxB6qWQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </section>
+        
+        <section id="tecnicas">
+            <h2 class="section-title">Técnicas de Lactancia</h2>
+            
+            <div class="card">
+                <h3 class="card-title">Posiciones correctas</h3>
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-baby"></i></div>
+                        <div>
+                            <h4>Posición de cuna</h4>
+                            <p>Sostén al bebé con el brazo del mismo lado del pecho con el que lo amamantas, con su cabeza en el antebrazo.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-baby-carriage"></i></div>
+                        <div>
+                            <h4>Posición de balón</h4>
+                            <p>El bebé descansa a tu lado, con sus pies hacia tu espalda. Ideal para cesáreas o gemelos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-couch"></i></div>
+                        <div>
+                            <h4>Posición acostada</h4>
+                            <p>Madre y bebé acostados de lado, frente a frente. Cómoda para tomas nocturnas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">Señales de buen agarre</h3>
+                <ul>
+                    <li>La boca del bebé está bien abierta</li>
+                    <li>El labio inferior está volteado hacia afuera</li>
+                    <li>La barbilla toca el pecho</li>
+                    <li>Se escucha tragar pero no chasquidos</li>
+                    <li>No hay dolor después de los primeros segundos</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">Frecuencia y duración</h3>
+                <p>La lactancia debe ser a demanda, cuando el bebé muestre señales de hambre (chuparse las manos, mover la cabeza buscando el pecho). Los recién nacidos suelen alimentarse 8-12 veces en 24 horas. Cada toma puede durar entre 15-40 minutos.</p>
+            </div>
+        </section>
+        
+        <section id="politica">
+            <h2 class="section-title">Política Institucional de Lactancia Materna</h2>
+            
+            <div class="card">
+                <p>Nuestra institución promueve activamente la lactancia materna exclusiva durante los primeros 6 meses de vida y complementaria hasta los 2 años o más, según recomendaciones de la OMS y UNICEF.</p>
+                
+                <iframe src="https://1drv.ms/b/c/afa10ee22887f78b/IQQrUqGn3Gc-S527ringwpzUAUgrtAfkFWoH_jBmjbp7ytI" frameborder="0" scrolling="no" style="width: 100%; height: 600px; border: none; margin: 1rem 0;"></iframe>
+                
+                <p>Visualización únicamente. Documento oficial del Instituto sin opción de descarga.</p>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">Iniciativa Hospital Amigo del Niño</h3>
+                <p>Nuestro centro cumple con los 10 pasos para una lactancia exitosa establecidos por la OMS/UNICEF:</p>
+                <ol>
+                    <li>Disponer de una política por escrito</li>
+                    <li>Capacitar a todo el personal</li>
+                    <li>Informar a todas las embarazadas</li>
+                    <li>Ayudar a las madres a iniciar la lactancia</li>
+                    <li>Mostrar cómo amamantar</li>
+                    <li>No dar al recién nacido alimento diferente</li>
+                    <li>Practicar el alojamiento conjunto</li>
+                    <li>Fomentar la lactancia a demanda</li>
+                    <li>No dar chupetes artificiales</li>
+                    <li>Fomentar grupos de apoyo</li>
+                </ol>
+            </div>
+        </section>
+        
+        <section id="preguntas">
+            <h2 class="section-title">Preguntas Frecuentes</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>¿Cómo sé si mi bebé está recibiendo suficiente leche?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Señales de que tu bebé está recibiendo suficiente leche: moja 6-8 pañales diarios, tiene deposiciones frecuentes (al menos 3-4 al día en las primeras semanas), aumenta de peso adecuadamente, se ve satisfecho después de las tomas y está alerta cuando está despierto.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>¿Qué debo comer durante la lactancia?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Una dieta balanceada con frutas, verduras, granos enteros, proteínas y lácteos. Bebe suficiente agua (la sed es tu guía). No necesitas alimentos especiales, pero sí unas 500 calorías adicionales al día. Evita el alcohol y limita la cafeína.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>¿Puedo amamantar si estoy enferma?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>En la mayoría de los casos sí, y es recomendable. Tu cuerpo produce anticuerpos que protegen al bebé. Para resfriados, usa mascarilla y lava tus manos frecuentemente. Consulta con tu médico sobre medicamentos compatibles con la lactancia.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>¿Cómo puedo aumentar mi producción de leche?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>La producción sigue la ley de oferta y demanda: amamanta con frecuencia (8-12 veces en 24 horas), asegura un buen agarre, alterna ambos pechos, descansa lo suficiente, mantente hidratada y evita el estrés. Los extractores pueden ayudar a estimular mayor producción.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>¿Hasta qué edad se recomienda la lactancia materna?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>La OMS recomienda lactancia exclusiva hasta los 6 meses, y luego complementaria con otros alimentos hasta los 2 años o más. La duración final es decisión de cada madre y bebé, según sus necesidades y circunstancias.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contacto">
+            <h2 class="section-title">Contacto y Apoyo</h2>
+            
+            <div class="contact-info">
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                    <h3>Línea de Lactancia</h3>
+                    <p>01-800-LACTANCIA</p>
+                    <p>24/7 atención especializada</p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h3>Talleres y Grupos</h3>
+                    <p>Martes y Jueves 10:00-12:00</p>
+                    <p>Sala de Lactancia, 3er piso</p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fas fa-user-nurse"></i></div>
+                    <h3>Consultora en Lactancia</h3>
+                    <p>Dra. María Fernández</p>
+                    <p>Citas: ext. 4567</p>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3 class="card-title">Recursos Adicionales</h3>
+                <ul>
+                    <li><a href="#" target="_blank">Guía completa de lactancia (PDF)</a></li>
+                    <li><a href="#" target="_blank">Lista de medicamentos compatibles</a></li>
+                    <li><a href="#" target="_blank">Red de madres lactantes</a></li>
+                    <li><a href="#" target="_blank">Alquiler de extractores</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <img src="https://via.placeholder.com/80x40?text=Logo" alt="Logo" style="height: 40px; margin-bottom: 1rem;">
+            <div class="footer-links">
+                <a href="#" class="footer-link">Política de Privacidad</a>
+                <a href="#" class="footer-link">Términos de Uso</a>
+                <a href="#" class="footer-link">Mapa del Sitio</a>
+            </div>
+            <p>© 2023 Institución de Salud. Todos los derechos reservados.</p>
+            <p>Promoviendo la salud infantil a través de la lactancia materna.</p>
+        </div>
+    </footer>
+    
+    <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+    
+    <script>
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                faqItem.classList.toggle('active');
+                
+                // Close other open FAQs
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    if (item !== faqItem && item.classList.contains('active')) {
+                        item.classList.remove('active');
+                    }
+                });
+            });
+        });
+        
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update active nav link
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Highlight current section in nav
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionBottom = sectionTop + section.offsetHeight;
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                    const id = section.getAttribute('id');
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
