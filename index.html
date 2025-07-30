@@ -2,90 +2,83 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Política Institucional de Lactancia Materna</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+  <title>Micrositio Institucional</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body {
-      background-color: #F8FAFC;
-      font-family: 'Segoe UI', sans-serif;
-      color: #333;
-    }
-    .header {
-      background-color: #2A5CAA;
+    /* Estilo de la gota */
+    .gota-menu {
+      width: 120px;
+      height: 160px;
+      margin: auto;
+      background: linear-gradient(to bottom, #FF69B4, #2A5CAA);
+      border-radius: 60% 60% 50% 50% / 70% 70% 30% 30%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
       color: white;
-      padding: 2rem 1rem;
       text-align: center;
+    }
+    .gota-menu a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      margin: 4px 0;
+      font-size: 13px;
     }
     .section-title {
-      color: #2A5CAA;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-    }
-    iframe {
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-    footer {
+      margin-top: 3rem;
+      font-weight: bold;
       text-align: center;
-      font-size: 13px;
-      color: #777;
-      padding: 2rem 1rem;
-      background-color: #f1f5f9;
+    }
+    .section-content {
+      max-width: 720px;
+      margin: auto;
+      padding: 1rem;
     }
   </style>
 </head>
-<body>
+<body class="bg-light">
 
-  <div class="header">
-    <h1>🤱 Política Institucional de Lactancia Materna</h1>
-    <p class="mb-0">Consulta visual, videos informativos y canal directo de comunicación</p>
+  <!-- Menú en forma de gota -->
+  <div class="text-center my-4">
+    <div class="gota-menu d-flex align-items-center justify-content-center">
+      <div>
+        <small style="font-size:12px; font-weight:bold;">MENÚ</small>
+        <a href="#documento">📄 Documento</a>
+        <a href="#videos">🎥 Videos</a>
+        <a href="#contacto">📬 Preguntas</a>
+      </div>
+    </div>
   </div>
 
-  <div class="container">
+  <!-- Sección Documento -->
+  <h2 class="section-title" id="documento">📄 Documento Institucional</h2>
+  <div class="section-content">
+    <p>Aquí va el documento oficial, con contenido relevante y descargable si lo deseas.</p>
+  </div>
 
-    <!-- Sección de Información -->
-    <h2 class="section-title">📄 Documento Institucional</h2>
-    <div class="text-center">
-      <iframe src="https://1drv.ms/b/c/afa10ee22887f78b/IQQrUqGn3Gc-S527ringwpzUAUgrtAfkFWoH_jBmjbp7ytI"
-        width="100%" height="600px"></iframe>
-      <p class="text-muted mt-2">Visualización únicamente. Documento oficial sin opción de descarga.</p>
-    </div>
+  <!-- Sección Videos -->
+  <h2 class="section-title" id="videos">🎥 Videos Educativos</h2>
+  <div class="section-content">
+    <p>Incorpora aquí los videos con iframe de YouTube, tutoriales o testimonios institucionales.</p>
+  </div>
 
-    <!-- Sección de Videos -->
-    <h2 class="section-title">🎥 Videos Educativos</h2>
-    <div class="row gy-4">
-      <div class="col-md-6">
-        <iframe src="https://drive.google.com/file/d/VIDEO_ID_1/preview" width="100%" height="315" allow="autoplay"></iframe>
-      </div>
-      <div class="col-md-6">
-        <iframe src="https://drive.google.com/file/d/VIDEO_ID_2/preview" width="100%" height="315" allow="autoplay"></iframe>
-      </div>
-      <!-- Puedes clonar estas columnas para más videos -->
-    </div>
-
-    <!-- Sección de Contacto -->
-    <h2 class="section-title">📬 Envíanos tus preguntas</h2>
-    <form action="mailto:tu_correo@institucion.edu.mx" method="POST" enctype="text/plain">
+  <!-- Sección Preguntas -->
+  <h2 class="section-title" id="contacto">📬 Envíanos tus preguntas</h2>
+  <div class="section-content">
+    <form>
       <div class="mb-3">
         <label for="nombre" class="form-label">Tu nombre</label>
-        <input type="text" class="form-control" id="nombre" name="Nombre" required>
+        <input type="text" class="form-control" id="nombre" placeholder="Escribe tu nombre">
       </div>
       <div class="mb-3">
-        <label for="mensaje" class="form-label">Pregunta o comentario</label>
-        <textarea class="form-control" id="mensaje" name="Mensaje" rows="4" required></textarea>
+        <label for="pregunta" class="form-label">Tu pregunta</label>
+        <textarea class="form-control" id="pregunta" rows="4" placeholder="¿Qué quieres saber?"></textarea>
       </div>
-      <button type="submit" class="btn btn-primary">Enviar por correo</button>
+      <button type="submit" class="btn btn-primary">Enviar pregunta</button>
     </form>
-
   </div>
 
-  <footer>
-    Micrositio institucional · Lactancia Materna · © 2025 Instituto de Salud Materno Infantil
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
