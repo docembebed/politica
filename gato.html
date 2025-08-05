@@ -53,7 +53,7 @@
         .cell {
             width: 100%;
             height: 0;
-            padding-bottom: 100%; /* Mantener celdas cuadradas */
+            padding-bottom: 100%;
             background-color: #e2d4f0;
             border-radius: 10px;
             display: flex;
@@ -61,7 +61,7 @@
             align-items: center;
             font-size: clamp(30px, 8vw, 40px);
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
             position: relative;
         }
         
@@ -78,6 +78,12 @@
         
         .cell:hover {
             background-color: #d0b3e6;
+            transform: scale(1.05);
+        }
+        
+        .cell.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
         }
         
         .message {
@@ -113,16 +119,46 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: clamp(0.9rem, 3vw, 1rem);
-            transition: background-color 0.3s;
+            transition: all 0.3s;
         }
         
         .vf-buttons button:hover {
             background-color: #7a52c4;
+            transform: translateY(-2px);
+        }
+        
+        .score-container {
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 10px auto;
+            max-width: 500px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
         }
         
         .score {
             font-size: clamp(1rem, 3vw, 1.2rem);
-            margin: 10px;
+            margin: 5px 10px;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .score-x {
+            background-color: rgba(156, 39, 176, 0.1);
+            color: #9c27b0;
+        }
+        
+        .score-o {
+            background-color: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+        }
+        
+        .current-turn {
+            box-shadow: 0 0 0 2px currentColor;
         }
         
         .game-buttons {
@@ -141,11 +177,28 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: clamp(0.9rem, 3vw, 1rem);
-            transition: background-color 0.3s;
+            transition: all 0.3s;
         }
         
         .game-buttons button:hover {
             background-color: #b13ac7;
+            transform: translateY(-2px);
+        }
+        
+        .feedback {
+            margin-top: 10px;
+            font-style: italic;
+            color: #5d3a9e;
+        }
+        
+        .correct {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .incorrect {
+            color: #f44336;
+            font-weight: bold;
         }
         
         .fa-tint { color: #9c27b0; } /* Gota de leche */
@@ -169,6 +222,11 @@
             .game-buttons button {
                 width: 80%;
             }
+            
+            .score-container {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
@@ -177,15 +235,15 @@
         <h1>Gato de la Lactancia + Puntos V/F 👶💧</h1>
         <p>Forma 3 en raya y responde preguntas para sumar puntos extra.</p>
         
-        <div class="score">
-            Puntos: <span id="score-x">Gota de Leche (X): 0</span> | 
-            <span id="score-o">Bebé (O): 0</span>
+        <div class="score-container">
+            <div class="score score-x" id="score-x">Gota de Leche (X): 0</div>
+            <div class="score score-o" id="score-o">Bebé (O): 0</div>
         </div>
     </div>
     
     <div class="board-container">
         <div class="board" id="board"></div>
-        <div class="message" id="message"></div>
+        <div class="message" id="message">Turno de Gota de Leche (X)</div>
         
         <!-- Sección de preguntas (aparece después de cada movimiento) -->
         <div class="question-box" id="question-box" style="display: none;">
@@ -194,6 +252,7 @@
                 <button onclick="answerQuestion(true)">Verdadero</button>
                 <button onclick="answerQuestion(false)">Falso</button>
             </div>
+            <div id="feedback" class="feedback"></div>
         </div>
     </div>
     
@@ -209,23 +268,62 @@
         const questionText = document.getElementById('question-text');
         const scoreXElement = document.getElementById('score-x');
         const scoreOElement = document.getElementById('score-o');
+        const feedbackElement = document.getElementById('feedback');
         
         let currentPlayer = 'X';
         let gameBoard = ['', '', '', '', '', '', '', '', ''];
         let gameActive = true;
         let scoreX = 0, scoreO = 0;
+        let waitingForAnswer = false;
+        let currentQuestion = null;
 
-        // Preguntas de V/F (pregunta, respuesta correcta)
+        // Preguntas de V/F (pregunta, respuesta correcta, explicación)
         const questions = [
-            { text: "La leche materna cambia de sabor según lo que come la madre.", answer: true },
-            { text: "Dar el pecho duele siempre.", answer: false },
-            { text: "El calostro es la primera vacuna del bebé.", answer: true },
-            { text: "La lactancia prolongada debilita los huesos de la madre.", answer: false },
-            { text: "Se puede amamantar incluso si la madre está resfriada.", answer: true },
-            { text: "La lactancia evita todos los cólicos del bebé.", answer: false },
-            { text: "Amamantar reduce el riesgo de diabetes tipo 2 en la madre.", answer: true },
-            { text: "Los bebés lactantes no necesitan tomar agua.", answer: true },
-            { text: "La leche materna no tiene suficiente hierro para el bebé.", answer: false }
+            { 
+                text: "La leche materna cambia de sabor según lo que come la madre.", 
+                answer: true,
+                explanation: "¡Correcto! La leche materna puede variar ligeramente de sabor según la dieta de la madre, lo que ayuda al bebé a aceptar diferentes sabores al comenzar la alimentación complementaria."
+            },
+            { 
+                text: "Dar el pecho duele siempre.", 
+                answer: false,
+                explanation: "¡Exacto! La lactancia no debería doler. Si hay dolor, puede indicar un mal agarre u otro problema que debe ser evaluado por un especialista."
+            },
+            { 
+                text: "El calostro es la primera vacuna del bebé.", 
+                answer: true,
+                explanation: "¡Así es! El calostro es rico en anticuerpos y nutrientes esenciales que protegen al recién nacido de infecciones."
+            },
+            { 
+                text: "La lactancia prolongada debilita los huesos de la madre.", 
+                answer: false,
+                explanation: "Correcto. La lactancia no debilita los huesos de la madre. De hecho, el cuerpo se adapta para mantener los niveles de calcio."
+            },
+            { 
+                text: "Se puede amamantar incluso si la madre está resfriada.", 
+                answer: true,
+                explanation: "¡Verdadero! La madre puede y debe seguir amamantando cuando está enferma, ya que transmite anticuerpos al bebé."
+            },
+            { 
+                text: "La lactancia evita todos los cólicos del bebé.", 
+                answer: false,
+                explanation: "Correcto. Aunque la lactancia ayuda, los cólicos pueden tener múltiples causas y no siempre se pueden evitar completamente."
+            },
+            { 
+                text: "Amamantar reduce el riesgo de diabetes tipo 2 en la madre.", 
+                answer: true,
+                explanation: "¡Exacto! La lactancia ayuda a regular el metabolismo de la glucosa y reduce el riesgo de diabetes tipo 2 en la madre."
+            },
+            { 
+                text: "Los bebés lactantes no necesitan tomar agua.", 
+                answer: true,
+                explanation: "¡Correcto! La leche materna proporciona toda la hidratación que necesita el bebé, incluso en climas cálidos."
+            },
+            { 
+                text: "La leche materna no tiene suficiente hierro para el bebé.", 
+                answer: false,
+                explanation: "¡Así es! Aunque tiene bajos niveles de hierro, su biodisponibilidad es muy alta (se absorbe casi en un 70%)."
+            }
         ];
 
         // Inicializar tablero
@@ -243,10 +341,13 @@
                 
                 board.appendChild(cell);
             }
+            updateTurnIndicator();
         }
 
         // Manejar clic en celda (juego principal)
         function handleCellClick(e) {
+            if (waitingForAnswer) return;
+            
             const cell = e.target.classList.contains('cell') ? e.target : e.target.parentElement;
             const index = cell.getAttribute('data-index');
             
@@ -269,43 +370,104 @@
 
         // Mostrar pregunta aleatoria
         function showRandomQuestion() {
-            const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-            questionText.textContent = randomQuestion.text;
-            questionBox.style.display = 'block';
+            waitingForAnswer = true;
+            disableBoard();
             
-            // Guardar la respuesta correcta temporalmente
-            questionBox.dataset.correctAnswer = randomQuestion.answer;
+            // Filtrar preguntas no mostradas aún
+            const availableQuestions = questions.filter(q => !q.used);
+            
+            // Si todas las preguntas han sido usadas, reiniciar
+            if (availableQuestions.length === 0) {
+                questions.forEach(q => q.used = false);
+                currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+            } else {
+                currentQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+            }
+            
+            currentQuestion.used = true;
+            questionText.textContent = currentQuestion.text;
+            feedbackElement.textContent = '';
+            feedbackElement.className = 'feedback';
+            questionBox.style.display = 'block';
         }
 
         // Responder pregunta V/F (puntos extra)
         function answerQuestion(userAnswer) {
-            const correctAnswer = questionBox.dataset.correctAnswer === 'true';
-            const isCorrect = (userAnswer === correctAnswer);
+            const isCorrect = (userAnswer === currentQuestion.answer);
+            
+            feedbackElement.textContent = currentQuestion.explanation;
+            feedbackElement.classList.add(isCorrect ? 'correct' : 'incorrect');
             
             if (isCorrect) {
                 // Sumar punto al jugador actual
                 if (currentPlayer === 'X') scoreX++;
                 else scoreO++;
                 updateScores();
-                message.textContent = "¡Correcto! +1 punto.";
-            } else {
-                message.textContent = "Incorrecto. Sigue jugando.";
             }
             
-            questionBox.style.display = 'none';
-            switchPlayer(); // Cambiar turno después de responder
+            // Deshabilitar botones de respuesta
+            const buttons = document.querySelectorAll('.vf-buttons button');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'not-allowed';
+            });
+            
+            // Esperar 2 segundos antes de continuar
+            setTimeout(() => {
+                questionBox.style.display = 'none';
+                waitingForAnswer = false;
+                enableBoard();
+                switchPlayer();
+                
+                // Restaurar botones de respuesta
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                });
+            }, 2000);
         }
 
         // Actualizar puntuación
         function updateScores() {
             scoreXElement.textContent = `Gota de Leche (X): ${scoreX}`;
             scoreOElement.textContent = `Bebé (O): ${scoreO}`;
+            updateTurnIndicator();
+        }
+
+        // Actualizar indicador de turno actual
+        function updateTurnIndicator() {
+            if (currentPlayer === 'X') {
+                scoreXElement.classList.add('current-turn');
+                scoreOElement.classList.remove('current-turn');
+            } else {
+                scoreOElement.classList.add('current-turn');
+                scoreXElement.classList.remove('current-turn');
+            }
         }
 
         // Cambiar jugador
         function switchPlayer() {
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
             message.textContent = `Turno de ${currentPlayer === 'X' ? 'Gota de Leche (X)' : 'Bebé (O)'}`;
+            updateTurnIndicator();
+        }
+
+        // Deshabilitar tablero
+        function disableBoard() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                cell.classList.add('disabled');
+            });
+        }
+
+        // Habilitar tablero
+        function enableBoard() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                cell.classList.remove('disabled');
+            });
         }
 
         // Verificar ganador del 3 en raya
@@ -320,14 +482,27 @@
                 const [a, b, c] = pattern;
                 if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
                     gameActive = false;
+                    disableBoard();
                     message.textContent = `¡${currentPlayer === 'X' ? 'Gota de Leche 💧' : 'Bebé 👶'} ganó el 3 en raya!`;
+                    
+                    // Sumar 3 puntos por ganar
+                    if (currentPlayer === 'X') scoreX += 3;
+                    else scoreO += 3;
+                    updateScores();
+                    
                     return;
                 }
             }
 
             if (!gameBoard.includes('')) {
                 gameActive = false;
+                disableBoard();
                 message.textContent = "¡Empate!";
+                
+                // Sumar 1 punto a cada jugador por empate
+                scoreX++;
+                scoreO++;
+                updateScores();
             }
         }
 
@@ -338,9 +513,14 @@
             currentPlayer = 'X';
             scoreX = 0;
             scoreO = 0;
+            waitingForAnswer = false;
             updateScores();
             message.textContent = "Turno de Gota de Leche (X)";
             questionBox.style.display = 'none';
+            
+            // Resetear preguntas usadas
+            questions.forEach(q => q.used = false);
+            
             createBoard();
         }
 
