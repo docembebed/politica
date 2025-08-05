@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gato de la Lactancia + Puntos V/F</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f0ff;
+            color: #5d3a9e;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header-container {
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            margin-top: 0;
+            font-size: clamp(1.5rem, 5vw, 2rem);
+        }
+        
+        p {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            margin: 10px auto;
+            max-width: 600px;
+        }
+        
+        .board-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(60px, 100px));
+            grid-gap: 10px;
+            justify-content: center;
+            margin: 20px auto;
+            width: 100%;
+            max-width: 320px;
+        }
+        
+        .cell {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%; /* Mantener celdas cuadradas */
+            background-color: #e2d4f0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: clamp(30px, 8vw, 40px);
+            cursor: pointer;
+            transition: background-color 0.3s;
+            position: relative;
+        }
+        
+        .cell-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cell:hover {
+            background-color: #d0b3e6;
+        }
+        
+        .message {
+            margin: 15px;
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            font-weight: bold;
+            min-height: 40px;
+        }
+        
+        .question-box {
+            margin: 10px auto;
+            padding: 15px;
+            max-width: 500px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 90%;
+        }
+        
+        .vf-buttons { 
+            margin: 15px auto;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .vf-buttons button {
+            padding: 10px 20px;
+            background-color: #5d3a9e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            transition: background-color 0.3s;
+        }
+        
+        .vf-buttons button:hover {
+            background-color: #7a52c4;
+        }
+        
+        .score {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            margin: 10px;
+        }
+        
+        .game-buttons {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .game-buttons button {
+            padding: 10px 20px;
+            background-color: #9c27b0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            transition: background-color 0.3s;
+        }
+        
+        .game-buttons button:hover {
+            background-color: #b13ac7;
+        }
+        
+        .fa-tint { color: #9c27b0; } /* Gota de leche */
+        .fa-baby { color: #ff6b6b; }  /* Bebé */
+        
+        @media (max-width: 480px) {
+            .board {
+                grid-template-columns: repeat(3, minmax(50px, 80px));
+                grid-gap: 8px;
+            }
+            
+            .question-box {
+                padding: 10px;
+            }
+            
+            .game-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .game-buttons button {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1>Gato de la Lactancia + Puntos V/F 👶💧</h1>
+        <p>Forma 3 en raya y responde preguntas para sumar puntos extra.</p>
+        
+        <div class="score">
+            Puntos: <span id="score-x">Gota de Leche (X): 0</span> | 
+            <span id="score-o">Bebé (O): 0</span>
+        </div>
+    </div>
+    
+    <div class="board-container">
+        <div class="board" id="board"></div>
+        <div class="message" id="message"></div>
+        
+        <!-- Sección de preguntas (aparece después de cada movimiento) -->
+        <div class="question-box" id="question-box" style="display: none;">
+            <p id="question-text"></p>
+            <div class="vf-buttons">
+                <button onclick="answerQuestion(true)">Verdadero</button>
+                <button onclick="answerQuestion(false)">Falso</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="game-buttons">
+        <button onclick="resetGame()">Reiniciar Juego</button>
+        <button onclick="window.location.href='index.html'">Volver a la Página Principal</button>
+    </div>
+
+    <script>
+        const board = document.getElementById('board');
+        const message = document.getElementById('message');
+        const questionBox = document.getElementById('question-box');
+        const questionText = document.getElementById('question-text');
+        const scoreXElement = document.getElementById('score-x');
+        const scoreOElement = document.getElementById('score-o');
+        
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+        let scoreX = 0, scoreO = 0;
+
+        // Preguntas de V/F (pregunta, respuesta correcta)
+        const questions = [
+            { text: "La leche materna cambia de sabor según lo que come la madre.", answer: true },
+            { text: "Dar el pecho duele siempre.", answer: false },
+            { text: "El calostro es la primera vacuna del bebé.", answer: true },
+            { text: "La lactancia prolongada debilita los huesos de la madre.", answer: false },
+            { text: "Se puede amamantar incluso si la madre está resfriada.", answer: true },
+            { text: "La lactancia evita todos los cólicos del bebé.", answer: false },
+            { text: "Amamantar reduce el riesgo de diabetes tipo 2 en la madre.", answer: true },
+            { text: "Los bebés lactantes no necesitan tomar agua.", answer: true },
+            { text: "La leche materna no tiene suficiente hierro para el bebé.", answer: false }
+        ];
+
+        // Inicializar tablero
+        function createBoard() {
+            board.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.setAttribute('data-index', i);
+                cell.addEventListener('click', handleCellClick);
+                
+                const cellContent = document.createElement('div');
+                cellContent.classList.add('cell-content');
+                cell.appendChild(cellContent);
+                
+                board.appendChild(cell);
+            }
+        }
+
+        // Manejar clic en celda (juego principal)
+        function handleCellClick(e) {
+            const cell = e.target.classList.contains('cell') ? e.target : e.target.parentElement;
+            const index = cell.getAttribute('data-index');
+            
+            if (gameBoard[index] !== '' || !gameActive) return;
+            
+            // Colocar símbolo del jugador
+            gameBoard[index] = currentPlayer;
+            const cellContent = cell.querySelector('.cell-content');
+            cellContent.innerHTML = currentPlayer === 'X' 
+                ? '<i class="fas fa-tint"></i>'  // X = gota de leche
+                : '<i class="fas fa-baby"></i>'; // O = bebé
+            
+            checkWinner();
+            
+            // Mostrar pregunta V/F después del movimiento (si el juego no ha terminado)
+            if (gameActive) {
+                showRandomQuestion();
+            }
+        }
+
+        // Mostrar pregunta aleatoria
+        function showRandomQuestion() {
+            const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+            questionText.textContent = randomQuestion.text;
+            questionBox.style.display = 'block';
+            
+            // Guardar la respuesta correcta temporalmente
+            questionBox.dataset.correctAnswer = randomQuestion.answer;
+        }
+
+        // Responder pregunta V/F (puntos extra)
+        function answerQuestion(userAnswer) {
+            const correctAnswer = questionBox.dataset.correctAnswer === 'true';
+            const isCorrect = (userAnswer === correctAnswer);
+            
+            if (isCorrect) {
+                // Sumar punto al jugador actual
+                if (currentPlayer === 'X') scoreX++;
+                else scoreO++;
+                updateScores();
+                message.textContent = "¡Correcto! +1 punto.";
+            } else {
+                message.textContent = "Incorrecto. Sigue jugando.";
+            }
+            
+            questionBox.style.display = 'none';
+            switchPlayer(); // Cambiar turno después de responder
+        }
+
+        // Actualizar puntuación
+        function updateScores() {
+            scoreXElement.textContent = `Gota de Leche (X): ${scoreX}`;
+            scoreOElement.textContent = `Bebé (O): ${scoreO}`;
+        }
+
+        // Cambiar jugador
+        function switchPlayer() {
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            message.textContent = `Turno de ${currentPlayer === 'X' ? 'Gota de Leche (X)' : 'Bebé (O)'}`;
+        }
+
+        // Verificar ganador del 3 en raya
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // filas
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // columnas
+                [0, 4, 8], [2, 4, 6]              // diagonales
+            ];
+
+            for (const pattern of winPatterns) {
+                const [a, b, c] = pattern;
+                if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                    gameActive = false;
+                    message.textContent = `¡${currentPlayer === 'X' ? 'Gota de Leche 💧' : 'Bebé 👶'} ganó el 3 en raya!`;
+                    return;
+                }
+            }
+
+            if (!gameBoard.includes('')) {
+                gameActive = false;
+                message.textContent = "¡Empate!";
+            }
+        }
+
+        // Reiniciar juego
+        function resetGame() {
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            currentPlayer = 'X';
+            scoreX = 0;
+            scoreO = 0;
+            updateScores();
+            message.textContent = "Turno de Gota de Leche (X)";
+            questionBox.style.display = 'none';
+            createBoard();
+        }
+
+        // Iniciar juego al cargar la página
+        window.onload = resetGame;
+    </script>
+</body>
+</html>
